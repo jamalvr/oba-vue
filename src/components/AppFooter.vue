@@ -1,0 +1,12 @@
+<template>
+    <footer>
+        <h3>Made by Jamal van Rooijen</h3>
+    </footer>
+</template>
+
+<script>
+    export default {}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped></style>
