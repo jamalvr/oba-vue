@@ -4,7 +4,7 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 new Vue({
-  render: function (h) {
-    return h(App);
+  render: function (createElement) {
+    return createElement(App);
   },
 }).$mount('#app')
