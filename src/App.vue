@@ -19,9 +19,10 @@
         // Data needs to be a function to scope it to this component
         data: function () {
             return {
-                results: [],
                 loading: false,
+                results: [],
                 sorted: false,
+                filtered: false,
                 api: {
                     cors: 'https://cors-anywhere.herokuapp.com/',
                     endpoint: 'https://zoeken.oba.nl/api/v1/search/?q=',
@@ -32,19 +33,17 @@
                 }
             }
         },
-        // Get data on creation of this instance
+        // Get data after creation of this instance
         created: function () {
             this.loading = true;
             this.fetchData();
         },
         methods: {
-            toggleSort: function() {
-                return this.sort(this.results, 'year');
-            },
             // Helper function (could be global)
             sort: function() {
-                this.sorted = !this.sorted;
-                console.log(this.sorted);
+                return this.results.sort(function (a, b) {
+                    return a['year'] - b['year'];
+                });
             },
             // Fetching API data
             fetchData: function() {
