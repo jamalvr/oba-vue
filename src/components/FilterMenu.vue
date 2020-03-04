@@ -7,13 +7,21 @@
         
         <div class="filter-submenu">
             <h3>Filter</h3>
-            <button class="filter-bmi">Filter</button>
+            <button @click="toggleSort" class="filter-bmi">Filter</button>
         </div>
     </div>
 </template>
 
 <script>
-    export default {}
+    export default {
+        props: {},
+        methods: {
+            toggleSort: function() {
+                // Emit to parent state
+                this.$emit('toggleSort');
+            },
+        }
+    }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

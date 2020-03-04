@@ -2,7 +2,7 @@
     <div id="app" class="container">
         <app-header></app-header>
         <p v-if="loading">Loading...</p>
-        <filter-menu></filter-menu>
+        <filter-menu @toggleSort="sort"></filter-menu>
         <overview :results="results"></overview>
         <app-footer></app-footer>
     </div>
@@ -21,6 +21,7 @@
             return {
                 results: [],
                 loading: false,
+                sorted: false,
                 api: {
                     cors: 'https://cors-anywhere.herokuapp.com/',
                     endpoint: 'https://zoeken.oba.nl/api/v1/search/?q=',
@@ -37,23 +38,33 @@
             this.fetchData();
         },
         methods: {
+            toggleSort: function() {
+                return this.sort(this.results, 'year');
+            },
+            // Helper function (could be global)
+            sort: function() {
+                this.sorted = !this.sorted;
+                console.log(this.sorted);
+            },
+            // Fetching API data
             fetchData: function() {
                 const url = `${this.api.cors}${this.api.endpoint}${this.api.query}&authorization=${this.api.key}&detaillevel=${this.api.detail}&output=json`;
                 const config = {Authorization: `Bearer ${this.api.secret}`};
                 
                 fetch(url, config)
-                    .then(function(response) {
+                    // Arrow functions so 'this' takes parent context
+                    .then(response => {
                         return response.json();
                     })
-                    .then(function(data) {
+                    .then(data => {
                         this.loading = false;
                         this.results = data.results;
                         console.log(this.results);
                     })
-                    .catch(function(err) {
+                    .catch(err => {
                         console.log(err);
                     });
-            }
+            },
         },
         components: {
             'app-header': AppHeader,
