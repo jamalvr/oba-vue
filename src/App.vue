@@ -42,17 +42,17 @@
             // Helper function (could be global)
             sortHandler: function () {
                 this.sorted = !this.sorted;
-                
                 if (this.sorted) {
                     this.sortByYear();
                 } else {
-                    this.sortAlfabetical();
+                    this.sortAlfabetical(this.results);
                 }
             },
-            sortAlfabetical: function() {
+            // Ombouwen zodat deze meer general is
+            sortAlfabetical: function(array) {
                 this.sorted = false;
                 const dataString = 'title';
-                return this.results = this.results.sort(function (a, b) {
+                return array.sort(function (a, b) {
                     if (a[dataString] < b[dataString]) {
                         return -1;
                     }
@@ -81,14 +81,19 @@
                     })
                     .then(data => {
                         this.loading = false;
-                        this.mapData(data.results);
+                        console.log(this.mapData(data.results));
+                        return this.mapData(data.results);
+                    })
+                    .then(mappedData => {
+                        console.log(mappedData);
+                        this.results = this.sortAlfabetical(mappedData);
                     })
                     .catch(err => {
                         console.log(err);
                     });
             },
             mapData: function (data) {
-                this.results = data.map(function (object) {
+                return data.map(function (object) {
                     return data = {
                         img: object.coverimages[1],
                         title: object.titles[0],
