@@ -2,7 +2,7 @@
     <div id="app" class="container">
         <app-header></app-header>
         <p v-if="loading">Loading...</p>
-        <filter-menu @toggleSort="sort"></filter-menu>
+        <filter-menu @toggleSort="sortHandler"></filter-menu>
         <overview :results="results"></overview>
         <app-footer></app-footer>
     </div>
@@ -40,29 +40,60 @@
         },
         methods: {
             // Helper function (could be global)
-            sort: function() {
-                return this.results.sort(function (a, b) {
-                    return a['year'] - b['year'];
+            sortHandler: function (array, dataString) {
+                if (dataString === 'year') {
+                    this.sortByYear(array, dataString);
+                } else if (dataString === 'title') {
+                    this.sortAlfabetical(array, dataString);
+                } else {
+                  console.log('Not a valid datastring')
+                }
+            },
+            sortAlfabetical: function(array, dataString) {
+                this.sorted = false;
+                return this.results = array.sort(function (a, b) {
+                    if (a[dataString] < b[dataString]) {
+                        return -1;
+                    }
+                    if (a[dataString] > b[dataString]) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            },
+            sortByYear: function(array, dataString) {
+                this.sorted = true;
+                return this.results = array.sort(function (a, b) {
+                    return a[dataString] - b[dataString];
                 });
             },
             // Fetching API data
-            fetchData: function() {
+            fetchData: function () {
                 const url = `${this.api.cors}${this.api.endpoint}${this.api.query}&authorization=${this.api.key}&detaillevel=${this.api.detail}&output=json`;
                 const config = {Authorization: `Bearer ${this.api.secret}`};
                 
                 fetch(url, config)
-                    // Arrow functions so 'this' takes parent context
+                // Arrow functions so 'this' takes parent context
                     .then(response => {
                         return response.json();
                     })
                     .then(data => {
                         this.loading = false;
-                        this.results = data.results;
-                        console.log(this.results);
+                        this.mapData(data.results);
                     })
                     .catch(err => {
                         console.log(err);
                     });
+            },
+            mapData: function (data) {
+                this.results = data.map(function (object) {
+                    return data = {
+                        img: object.coverimages[1],
+                        title: object.titles[0],
+                        year: object.year,
+                        authors: object.authors.join(', '),
+                    };
+                });
             },
         },
         components: {
