@@ -2,8 +2,8 @@
     <div id="app" class="container">
         <app-header></app-header>
         <p v-if="loading">Loading...</p>
-        <filter-menu @toggleSort="sortHandler"></filter-menu>
-        <overview :results="results"></overview>
+        <filter-menu @toggleFilter="filterHandler" @toggleSort="sortHandler"></filter-menu>
+        <overview :results="renderedResults"></overview>
         <app-footer></app-footer>
     </div>
 </template>
@@ -21,6 +21,7 @@
             return {
                 loading: false,
                 results: [],
+                renderedResults: [],
                 sorted: false,
                 filtered: false,
                 api: {
@@ -43,15 +44,24 @@
             sortHandler: function () {
                 this.sorted = !this.sorted;
                 if (this.sorted) {
-                    this.sortByYear();
+                    this.sortByYear(this.results, 'year');
                 } else {
-                    this.sortAlfabetical(this.results);
+                    this.sortAlfabetical(this.results, 'title');
+                }
+            },
+            filterHandler: function() {
+                this.filtered = !this.filtered;
+                if (this.filtered) {
+                    this.renderedResults = this.renderedResults.filter(function (bro) {
+                        return bro.year > 2000;
+                    });
+                } else {
+                    this.renderedResults = this.results;
                 }
             },
             // Ombouwen zodat deze meer general is
-            sortAlfabetical: function(array) {
+            sortAlfabetical: function(array, dataString) {
                 this.sorted = false;
-                const dataString = 'title';
                 return array.sort(function (a, b) {
                     if (a[dataString] < b[dataString]) {
                         return -1;
@@ -62,10 +72,9 @@
                     return 0;
                 });
             },
-            sortByYear: function() {
+            sortByYear: function(array, dataString) {
                 this.sorted = true;
-                const dataString = 'year';
-                return this.results = this.results.sort(function (a, b) {
+                return array.sort(function (a, b) {
                     return a[dataString] - b[dataString];
                 });
             },
@@ -81,12 +90,11 @@
                     })
                     .then(data => {
                         this.loading = false;
-                        console.log(this.mapData(data.results));
                         return this.mapData(data.results);
                     })
                     .then(mappedData => {
-                        console.log(mappedData);
-                        this.results = this.sortAlfabetical(mappedData);
+                        this.results = this.sortAlfabetical(mappedData, 'title');
+                        this.renderedResults = this.results;
                     })
                     .catch(err => {
                         console.log(err);

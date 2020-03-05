@@ -1,13 +1,13 @@
 <template>
     <div class="filter-menu">
         <div class="filter-submenu">
-            <h2>Sort</h2>
-            <button class="sort-bmi">Sort</button>
+            <h2>Filter</h2>
+            <button @click="toggleFilter" class="sort-bmi">Filter</button>
         </div>
         
         <div class="filter-submenu">
-            <h3>Filter</h3>
-            <button @click="toggleSort" class="filter-bmi">Filter</button>
+            <h3>Sort</h3>
+            <button @click="toggleSort" class="filter-bmi">Sort</button>
         </div>
     </div>
 </template>
@@ -19,6 +19,10 @@
             toggleSort: function() {
                 // Emit to parent state
                 this.$emit('toggleSort');
+            },
+            toggleFilter: function() {
+                // Emit to parent state
+                this.$emit('toggleFilter');
             },
         }
     }
