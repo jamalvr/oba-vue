@@ -44,9 +44,9 @@
             sortHandler: function () {
                 this.sorted = !this.sorted;
                 if (this.sorted) {
-                    this.sortByYear(this.results, 'year');
+                    this.sortByYear(this.renderedResults, 'year');
                 } else {
-                    this.sortAlfabetical(this.results, 'title');
+                    this.sortAlfabetical(this.renderedResults, 'title');
                 }
             },
             filterHandler: function() {
