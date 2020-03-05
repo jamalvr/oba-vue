@@ -40,18 +40,19 @@
         },
         methods: {
             // Helper function (could be global)
-            sortHandler: function (array, dataString) {
-                if (dataString === 'year') {
-                    this.sortByYear(array, dataString);
-                } else if (dataString === 'title') {
-                    this.sortAlfabetical(array, dataString);
+            sortHandler: function () {
+                this.sorted = !this.sorted;
+                
+                if (this.sorted) {
+                    this.sortByYear();
                 } else {
-                  console.log('Not a valid datastring')
+                    this.sortAlfabetical();
                 }
             },
-            sortAlfabetical: function(array, dataString) {
+            sortAlfabetical: function() {
                 this.sorted = false;
-                return this.results = array.sort(function (a, b) {
+                const dataString = 'title';
+                return this.results = this.results.sort(function (a, b) {
                     if (a[dataString] < b[dataString]) {
                         return -1;
                     }
@@ -61,9 +62,10 @@
                     return 0;
                 });
             },
-            sortByYear: function(array, dataString) {
+            sortByYear: function() {
                 this.sorted = true;
-                return this.results = array.sort(function (a, b) {
+                const dataString = 'year';
+                return this.results = this.results.sort(function (a, b) {
                     return a[dataString] - b[dataString];
                 });
             },
