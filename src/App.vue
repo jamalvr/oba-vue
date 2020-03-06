@@ -2,7 +2,7 @@
     <div id="app" class="container">
         <app-header></app-header>
         <p v-if="loading">Loading...</p>
-        <filter-menu @toggleFilter="filterHandler" @toggleSort="sortHandler"></filter-menu>
+        <filter-menu :sortedByYear="sortedByYear" :filtered="filtered" @toggleFilter="filterHandler" @toggleSort="sortHandler"></filter-menu>
         <overview :results="renderedResults"></overview>
         <app-footer></app-footer>
     </div>
@@ -22,7 +22,7 @@
                 loading: false,
                 results: [],
                 renderedResults: [],
-                sorted: false,
+                sortedByYear: false,
                 filtered: false,
                 api: {
                     cors: 'https://cors-anywhere.herokuapp.com/',
@@ -42,11 +42,11 @@
         methods: {
             // Helper function (could be global)
             sortHandler: function () {
-                this.sorted = !this.sorted;
-                if (this.sorted) {
-                    this.sortByYear(this.renderedResults, 'year');
+                this.sortedByYear = !this.sortedByYear;
+                if (this.sortedByYear) {
+                    this.sort(this.renderedResults, 'year');
                 } else {
-                    this.sortAlfabetical(this.renderedResults, 'title');
+                    this.sort(this.renderedResults, 'title');
                 }
             },
             filterHandler: function() {
@@ -59,9 +59,7 @@
                     this.renderedResults = this.results;
                 }
             },
-            // Ombouwen zodat deze meer general is
-            sortAlfabetical: function(array, dataString) {
-                this.sorted = false;
+            sort: function(array, dataString) {
                 return array.sort(function (a, b) {
                     if (a[dataString] < b[dataString]) {
                         return -1;
@@ -70,12 +68,6 @@
                         return 1;
                     }
                     return 0;
-                });
-            },
-            sortByYear: function(array, dataString) {
-                this.sorted = true;
-                return array.sort(function (a, b) {
-                    return a[dataString] - b[dataString];
                 });
             },
             // Fetching API data
@@ -93,7 +85,7 @@
                         return this.mapData(data.results);
                     })
                     .then(mappedData => {
-                        this.results = this.sortAlfabetical(mappedData, 'title');
+                        this.results = this.sort(mappedData, 'title');
                         this.renderedResults = this.results;
                     })
                     .catch(err => {
