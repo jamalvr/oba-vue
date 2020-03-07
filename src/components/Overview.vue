@@ -1,12 +1,20 @@
 <template>
     <ul class="content">
         <li v-for="result in results" :key="result.id">
-            <a class="card" href="/">
+            <router-link class="card" :to="{
+                name: 'detail',
+                params: {
+                    id: result.id,
+                    title: result.title,
+                    img: result.img,
+                    summary: result.summary,
+                    authors: result.authors,
+                }}">
                 <h2>{{ result.title }}</h2>
-                <img :src="result.img">
-                <p>{{ result.year }}</p>
-                <p>{{ result.authors }}</p>
-            </a>
+<!--                <img :src="result.img">-->
+<!--                <p>{{ result.year }}</p>-->
+<!--                <p>{{ result.authors }}</p>-->
+            </router-link>
         </li>
     </ul>
 </template>

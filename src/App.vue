@@ -1,5 +1,6 @@
 <template>
     <div id="app" class="container">
+        <router-view></router-view>
         <app-header></app-header>
         <p v-if="loading">Loading...</p>
         <filter-menu :sortedByYear="sortedByYear" :filtered="filtered" @toggleFilter="filterHandler" @toggleSort="sortHandler"></filter-menu>
@@ -82,6 +83,7 @@
                     })
                     .then(data => {
                         this.loading = false;
+                        console.log(data);
                         return this.mapData(data.results);
                     })
                     .then(mappedData => {
@@ -93,12 +95,14 @@
                     });
             },
             mapData: function (data) {
-                return data.map(function (object) {
+                return data.map(function (object, index) {
                     return data = {
                         img: object.coverimages[1],
                         title: object.titles[0],
                         year: object.year,
                         authors: object.authors.join(', '),
+                        id: index,
+                        summary: object.summaries,
                     };
                 });
             },
