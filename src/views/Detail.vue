@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div id="detail">
+        <router-link class="card" to="/">Back to home</router-link>
         <h1>{{ params.title }}</h1>
         <img :src="params.img" :alt="params.title">
         <p>{{ params.summary }}</p>
