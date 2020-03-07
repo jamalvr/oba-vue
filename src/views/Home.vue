@@ -1,8 +1,8 @@
 <template>
-    <div id="home" class="container">
-        <app-header :subject="api.query"></app-header>
-        <p v-if="loading">Loading...</p>
-        <filter-menu :sortedByYear="sortedByYear" :filtered="filtered" @toggleFilter="filterToggle" @toggleSort="sortToggle"></filter-menu>
+    <div id="home">
+        <div class="loading-bar" v-if="loading"></div>
+        <app-header v-if="!loading" :subject="api.query"></app-header>
+        <filter-menu v-if="!loading" :sortedByYear="sortedByYear" :filtered="filtered" @toggleFilter="filterToggle" @toggleSort="sortToggle"></filter-menu>
         <overview :results="renderedResults"></overview>
         <app-footer></app-footer>
     </div>
@@ -61,7 +61,6 @@
                 }
             },
             filterHandler: function() {
-                console.log('activated');
                 if (this.filtered) {
                     this.renderedResults = this.renderedResults.filter(function (bro) {
                         return bro.year > 2000;
@@ -113,6 +112,7 @@
             getLocalData: function () {
                 this.localData = localStorage.getItem('oba-vue');
                 this.results = JSON.parse(this.localData);
+                this.loading = false;
                 this.renderedResults = this.results;
             },
             mapData: function (data) {
@@ -138,22 +138,27 @@
 </script>
 
 <style lang="scss">
-    // Colors
-    $color--primary: pink;
-    $color--secondary: #000;
-    $color--white: #fff;
-    
-    // Padding
-    $padding--card: 16px;
-    $padding--container: 32px;
-    
-    // Misc
-    $border-radius--default: 4px;
-    $box-shadow--default: 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
-    
-    .container {
-        color: $color--white;
-        background-color: $color--secondary;
-        padding: $padding--container;
+    .loading-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 12px;
+        animation-name: color;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
     }
+
+    @keyframes color {
+        0% {
+            background-color: #222;
+        }
+        50% {
+            background-color: #4285f4;
+        }
+        100% {
+            background-color: #222;
+        }
+    }
+    
 </style>
