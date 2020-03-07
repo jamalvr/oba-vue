@@ -19,12 +19,14 @@
             filtered: Boolean,
         },
         computed: {
+            // Sort dynamic text
             titleSort: function() {
                 return this.sortedByYear ? 'Sorted by year' : 'Sorted alphabetical';
             },
             sortButtonText: function() {
                 return this.sortedByYear ? 'Sort alphabetical' : 'Sort by year';
             },
+            // Filter dynamic text
             titleFilter: function() {
                 return this.filtered ? 'Released after 2000' : 'All books';
             },

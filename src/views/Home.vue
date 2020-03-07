@@ -23,6 +23,7 @@
                 renderedResults: [],
                 sortedByYear: false,
                 filtered: false,
+                localData: null,
                 api: {
                     cors: 'https://cors-anywhere.herokuapp.com/',
                     endpoint: 'https://zoeken.oba.nl/api/v1/search/?q=',
@@ -36,7 +37,11 @@
         // Get data after creation of this instance
         created: function () {
             this.loading = true;
-            this.fetchData();
+            if('oba-vue' in localStorage) {
+                return this.getLocalData();
+            } else {
+                return this.fetchData();
+            }
         },
         methods: {
             // Helper function (could be global)
@@ -56,6 +61,7 @@
                 }
             },
             filterHandler: function() {
+                console.log('activated');
                 if (this.filtered) {
                     this.renderedResults = this.renderedResults.filter(function (bro) {
                         return bro.year > 2000;
@@ -78,6 +84,7 @@
             },
             // Fetching API data
             fetchData: function () {
+                console.log('Fetch data activated');
                 const url = `${this.api.cors}${this.api.endpoint}${this.api.query}&authorization=${this.api.key}&detaillevel=${this.api.detail}&output=json`;
                 const config = {Authorization: `Bearer ${this.api.secret}`};
                 
@@ -94,10 +101,19 @@
                     .then(mappedData => {
                         this.results = this.sort(mappedData, 'title');
                         this.renderedResults = this.results;
+                        this.storeLocalData(mappedData);
                     })
                     .catch(err => {
                         console.log(err);
                     });
+            },
+            storeLocalData: function(data) {
+                localStorage.setItem('oba-vue', JSON.stringify(data));
+            },
+            getLocalData: function () {
+                this.localData = localStorage.getItem('oba-vue');
+                this.results = JSON.parse(this.localData);
+                this.renderedResults = this.results;
             },
             mapData: function (data) {
                 return data.map(function (object, index) {
