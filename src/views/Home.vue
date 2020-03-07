@@ -123,7 +123,7 @@
                         year: object.year,
                         authors: object.authors.join(', '),
                         id: index,
-                        summary: object.summaries,
+                        summary: object.summaries ? object.summaries[0] : 'Geen samenvatting',
                     };
                 });
             },
