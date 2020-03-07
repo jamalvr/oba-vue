@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="container">
         <router-view></router-view>
-        <app-header></app-header>
+        <app-header :subject="api.query"></app-header>
         <p v-if="loading">Loading...</p>
         <filter-menu :sortedByYear="sortedByYear" :filtered="filtered" @toggleFilter="filterHandler" @toggleSort="sortHandler"></filter-menu>
         <overview :results="renderedResults"></overview>

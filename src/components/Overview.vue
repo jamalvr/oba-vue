@@ -11,9 +11,7 @@
                     authors: result.authors,
                 }}">
                 <h2>{{ result.title }}</h2>
-<!--                <img :src="result.img">-->
-<!--                <p>{{ result.year }}</p>-->
-<!--                <p>{{ result.authors }}</p>-->
+                <p>Release: {{ result.year }}</p>
             </router-link>
         </li>
     </ul>

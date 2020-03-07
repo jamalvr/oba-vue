@@ -1,11 +1,15 @@
 <template>
   <header>
-    <h1>I know it's my destiny</h1>
+    <h1>Everything about: {{ subject }}</h1>
   </header>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    subject: String,
+  },
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
