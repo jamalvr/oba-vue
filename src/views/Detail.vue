@@ -1,19 +1,32 @@
 <template>
     <div id="detail">
         <router-link class="card" to="/">Back to home</router-link>
-        <h1>{{ params.title }}</h1>
-        <img :src="params.img" :alt="params.title">
-        <p>{{ params.summary }}</p>
-        <p>{{ params.authors }}</p>
+        <h1>{{ current.title }}</h1>
+        <img :src="current.img" :alt="current.title">
+        <p>{{ current.summary }}</p>
+        <p>{{ current.authors }}</p>
     </div>
 </template>
 
 <script>
     export default {
+        props: {
+            appData: Object,
+            api: Object,
+        },
         data: function () {
             return {
                 // Get id params from current route
                 params: this.$route.params,
+            }
+        },
+        created: function() {
+            console.log(this.params.id);
+            console.log('appData', this.appData);
+        },
+        computed: {
+            current: function() {
+                return this.appData.results[this.params.id];
             }
         },
         watch: {
@@ -21,9 +34,6 @@
                 this.params = to.params;
             }
         },
-        created() {
-            console.log(this.$route.params);
-        }
     }
 </script>
 

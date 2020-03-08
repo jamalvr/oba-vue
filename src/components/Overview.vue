@@ -1,15 +1,7 @@
 <template>
     <ul class="content">
         <li v-for="result in results" :key="result.id">
-            <router-link class="card" :to="{
-                name: 'detail',
-                params: {
-                    id: result.id,
-                    title: result.title,
-                    img: result.img,
-                    summary: result.summary,
-                    authors: result.authors,
-                }}">
+            <router-link class="card" :to="{ name: 'detail', params: { id: result.id }}">
                 <div class="image">
                     <img :src="result.img" :alt="result.title">
                 </div>
