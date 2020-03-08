@@ -20,10 +20,6 @@
                 params: this.$route.params,
             }
         },
-        created: function() {
-            console.log(this.params.id);
-            console.log('appData', this.appData);
-        },
         computed: {
             current: function() {
                 return this.appData.results[this.params.id];

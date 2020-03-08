@@ -1,8 +1,19 @@
 <template>
     <div id="home">
-        <app-header v-if="!appData.loading" :subject="api.query"></app-header>
-        <filter-menu v-if="!appData.loading" :subject="api.query" :sortedByYear="appData.sortedByYear" :filtered="appData.filtered" @toggleFilter="filterToggle" @toggleSort="sortToggle"></filter-menu>
-        <overview :results="appData.renderedResults"></overview>
+        <app-header v-if="!appData.loading"
+                    :subject="api.query">
+        </app-header>
+        <filter-menu v-if="!appData.loading"
+                     :subject="api.query"
+                     :sortedByYear="appData.sortedByYear"
+                     :filtered="appData.filtered"
+                     @toggleFilter="filterToggle"
+                     @toggleSort="sortToggle">
+        </filter-menu>
+        <overview v-if="!appData.error" :results="appData.renderedResults"></overview>
+        <template v-if="appData.error">
+            No results available. Try again.
+        </template>
         <app-footer></app-footer>
     </div>
 </template>
@@ -67,17 +78,6 @@
 </script>
 
 <style lang="scss">
-    .loading-bar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 12px;
-        animation-name: color;
-        animation-duration: 2s;
-        animation-iteration-count: infinite;
-    }
-
     @keyframes color {
         0% {
             background-color: #222;

@@ -11,17 +11,24 @@
         </div>
         <div class="filter-submenu">
             <h3>Search for:</h3>
-            <input type="text" :value="subject" @submit="newRequest">
+            <input type="text" v-model="newSubject" @keyup.enter="newRequest">
         </div>
     </div>
 </template>
 
 <script>
+    import { eventBus } from '../main';
+    
     export default {
         props: {
             sortedByYear: Boolean,
             filtered: Boolean,
             subject: String,
+        },
+        data: function() {
+            return {
+                newSubject: null,
+            }
         },
         computed: {
             // Sort dynamic text
@@ -50,7 +57,10 @@
             },
             newRequest: function() {
                 // Emit to parent state
-                this.$emit('newRequest', this.subject);
+                if(this.newSubject !== null) {
+                    console.log('New request is emitted');
+                    eventBus.$emit('newRequest', this.newSubject);
+                }
             },
         }
     }

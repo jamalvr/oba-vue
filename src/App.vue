@@ -1,5 +1,8 @@
 <template>
     <div id="app" class="container">
+        <transition name="fade">
+            <div v-if="appData.loading" class="loading-bar"></div>
+        </transition>
         <!-- Add transition to the rendered view-->
         <transition name="fade">
             <!-- Render desired router view here-->
@@ -9,12 +12,15 @@
 </template>
 
 <script>
+    import { eventBus } from './main';
+    
     export default {
         name: 'App',
         data: function () {
             return {
                 appData: {
                     loading: false,
+                    error: false,
                     results: [],
                     renderedResults: [],
                     sortedByYear: false,
@@ -33,20 +39,26 @@
         },
         // Get data after creation of this instance
         created: function () {
-            this.appData.loading = true;
+            let vm = this;
+            
             if ('oba-vue' in localStorage) {
-                console.log('Local data');
                 this.getLocalData();
             } else {
-                console.log('API fetch');
-                return this.fetchData();
+                this.fetchData();
             }
+            
+            // Eventbus to talk with grandchildren
+            eventBus.$on('newRequest', function(data) {
+                vm.api.query = data;
+                vm.fetchData();
+            });
         },
         methods: {
             // Fetching API data
             fetchData: function () {
                 const url = `${this.api.cors}${this.api.endpoint}${this.api.query}&authorization=${this.api.key}&detaillevel=${this.api.detail}&output=json`;
                 const config = {Authorization: `Bearer ${this.api.secret}`};
+                this.appData.loading = true;
                 
                 fetch(url, config)
                 // Arrow functions so 'this' takes parent context
@@ -54,17 +66,22 @@
                         return response.json();
                     })
                     .then(data => {
+                        console.log(data.results);
+                        if (data.results.length <= 0) {
+                            return this.appData.error = true;
+                        }
                         this.appData.loading = false;
-                        console.log(data);
+                        this.appData.error = false;
                         return this.mapData(data.results);
                     })
                     .then(mappedData => {
                         this.appData.results = this.sort(mappedData, 'title');
-                        this.appData.renderedResults = this.results;
-                        this.storeLocalData(mappedData);
+                        this.appData.renderedResults = this.appData.results;
+                        return this.storeLocalData(mappedData);
                     })
                     .catch(err => {
                         console.log(err);
+                        this.appData.error = true;
                     });
             },
             storeLocalData: function (data) {
@@ -79,13 +96,24 @@
             mapData: function (data) {
                 return data.map(function (object, index) {
                     return data = {
-                        img: object.coverimages[1],
+                        img: object.coverimages[1] ? object.coverimages[1] : 'https://v111.nbc.bibliotheek.nl/thumbnail?uri=http://data.bibliotheek.nl/ggc/ppn/056890680&amp;token=c1322402',
                         title: object.titles[0],
                         year: object.year,
-                        authors: object.authors.join(', '),
+                        authors: object.authors ? object.authors.join(', ') : 'No authors',
                         id: index,
-                        summary: object.summaries ? object.summaries[0] : 'Geen samenvatting',
+                        summary: object.summaries ? object.summaries[0] : 'No summary',
                     };
+                });
+            },
+            sort: function(array, dataString) {
+                return array.sort(function (a, b) {
+                    if (a[dataString] < b[dataString]) {
+                        return -1;
+                    }
+                    if (a[dataString] > b[dataString]) {
+                        return 1;
+                    }
+                    return 0;
                 });
             },
         }
@@ -96,6 +124,17 @@
     body {
         padding: 0;
         margin: 0;
+    }
+
+    .loading-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 12px;
+        animation-name: color;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
     }
     
     .container {
