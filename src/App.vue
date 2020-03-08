@@ -63,7 +63,6 @@
                 vm.sortHandler();
             });
         },
-        
         methods: {
             // Fetching API data
             fetchData: function () {

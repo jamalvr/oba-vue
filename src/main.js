@@ -7,6 +7,7 @@ Vue.config.productionTip = false
 
 // Enable routing
 Vue.use(VueRouter);
+export const eventBus = new Vue();
 
 const router = new VueRouter({
   // Key & value routes
@@ -15,8 +16,6 @@ const router = new VueRouter({
   // History mode enables a 'no-hashtag' URL that is normally generated with Vue routing
   mode: 'history',
 });
-
-export const eventBus = new Vue();
 
 new Vue({
   // Use router in our Vue instance
