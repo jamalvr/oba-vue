@@ -6,9 +6,7 @@
         <filter-menu v-if="!appData.loading"
                      :subject="api.query"
                      :sortedByYear="appData.sortedByYear"
-                     :filtered="appData.filtered"
-                     @toggleFilter="filterToggle"
-                     @toggleSort="sortToggle">
+                     :filtered="appData.filtered">
         </filter-menu>
         <overview v-if="!appData.error" :results="appData.renderedResults"></overview>
         <template v-if="appData.error">
@@ -30,43 +28,7 @@
             api: Object,
         },
         methods: {
-            // Helper function (could be global)
-            sortToggle: function () {
-                this.appData.sortedByYear = !this.appData.sortedByYear;
-                this.sortHandler();
-            },
-            filterToggle: function() {
-                this.appData.filtered = !this.appData.filtered;
-                this.filterHandler();
-            },
-            sortHandler: function() {
-                if (this.appData.sortedByYear) {
-                    this.sort(this.appData.renderedResults, 'year');
-                } else {
-                    this.sort(this.appData.renderedResults, 'title');
-                }
-            },
-            filterHandler: function() {
-                if (this.appData.filtered) {
-                    this.appData.renderedResults = this.appData.renderedResults.filter(function (bro) {
-                        return bro.year > 2000;
-                    });
-                } else {
-                    this.appData.renderedResults = this.appData.results;
-                    this.sortHandler();
-                }
-            },
-            sort: function(array, dataString) {
-                return array.sort(function (a, b) {
-                    if (a[dataString] < b[dataString]) {
-                        return -1;
-                    }
-                    if (a[dataString] > b[dataString]) {
-                        return 1;
-                    }
-                    return 0;
-                });
-            },
+
         },
         components: {
             'app-header': AppHeader,

@@ -49,11 +49,11 @@
         methods: {
             toggleSort: function() {
                 // Emit to parent state
-                this.$emit('toggleSort');
+                eventBus.$emit('toggleSort', 'function');
             },
             toggleFilter: function() {
                 // Emit to parent state
-                this.$emit('toggleFilter');
+                eventBus.$emit('toggleFilter', 'function');
             },
             newRequest: function() {
                 // Emit to parent state
