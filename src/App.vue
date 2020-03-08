@@ -29,7 +29,8 @@
                     localQuery: null,
                 },
                 api: {
-                    cors: 'https://cors-anywhere.herokuapp.com/',
+                    cors: '',
+                    // cors: 'https://cors-anywhere.herokuapp.com/',
                     endpoint: 'https://zoeken.oba.nl/api/v1/search/?q=',
                     query: 'harry potter',
                     key: '1e19898c87464e239192c8bfe422f280',
