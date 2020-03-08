@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h1>Everything about: {{ subject }}</h1>
+    <h1>Every book about: {{ subject }}</h1>
   </header>
 </template>
 

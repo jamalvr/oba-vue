@@ -1,7 +1,7 @@
 <template>
     <div id="home">
         <app-header v-if="!appData.loading" :subject="api.query"></app-header>
-        <filter-menu v-if="!appData.loading" :sortedByYear="appData.sortedByYear" :filtered="appData.filtered" @toggleFilter="filterToggle" @toggleSort="sortToggle"></filter-menu>
+        <filter-menu v-if="!appData.loading" :subject="api.query" :sortedByYear="appData.sortedByYear" :filtered="appData.filtered" @toggleFilter="filterToggle" @toggleSort="sortToggle"></filter-menu>
         <overview :results="appData.renderedResults"></overview>
         <app-footer></app-footer>
     </div>

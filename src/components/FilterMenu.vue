@@ -9,6 +9,10 @@
             <h3>{{ titleSort }}</h3>
             <button @click="toggleSort" class="filter-bmi">{{ sortButtonText }}</button>
         </div>
+        <div class="filter-submenu">
+            <h3>Search for:</h3>
+            <input type="text" :value="subject" @submit="newRequest">
+        </div>
     </div>
 </template>
 
@@ -17,6 +21,7 @@
         props: {
             sortedByYear: Boolean,
             filtered: Boolean,
+            subject: String,
         },
         computed: {
             // Sort dynamic text
@@ -42,6 +47,10 @@
             toggleFilter: function() {
                 // Emit to parent state
                 this.$emit('toggleFilter');
+            },
+            newRequest: function() {
+                // Emit to parent state
+                this.$emit('newRequest', this.subject);
             },
         }
     }
