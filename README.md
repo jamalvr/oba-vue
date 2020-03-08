@@ -11,6 +11,8 @@ The app itself like stated before a re-make of an existing Web App From Scratch 
 - Single page web-app with detail pages (routing)
 - **Extra: Being able to search every subject you want**
 
+#### [Here's the demo!](https://shrouded-taiga-55867.herokuapp.com/)
+
 ![Screenshot](screenshot.png)
 
 ## Why Vue? 🤔
