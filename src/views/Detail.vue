@@ -1,10 +1,16 @@
 <template>
     <div id="detail">
         <router-link class="card" to="/">Back to home</router-link>
-        <h1>{{ current.title }}</h1>
-        <img :src="current.img" :alt="current.title">
-        <p>{{ current.summary }}</p>
-        <p>{{ current.authors }}</p>
+        <template v-if="!current">
+            <h1>404: Woops , this page doesn't exist!</h1>
+        </template>
+        
+        <template v-if="current">
+            <h1>{{ current.title }}</h1>
+            <img :src="current.img" :alt="current.title">
+            <p>{{ current.summary }}</p>
+            <p>{{ current.authors }}</p>
+        </template>
     </div>
 </template>
 
