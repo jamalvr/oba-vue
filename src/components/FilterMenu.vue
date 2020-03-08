@@ -81,6 +81,13 @@
         margin: 12px 0;
     }
     
+    input {
+        border: 0;
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 20px;
+    }
+    
     button {
         padding: 12px;
         width: 200px;
