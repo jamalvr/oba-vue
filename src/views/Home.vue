@@ -27,9 +27,6 @@
             appData: Object,
             api: Object,
         },
-        methods: {
-
-        },
         components: {
             'app-header': AppHeader,
             'app-footer': AppFooter,
