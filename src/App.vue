@@ -90,7 +90,7 @@
                         return this.storeLocalData('oba-vue', mappedData);
                     })
                     .catch(err => {
-                        console.log(err);
+                        window.alert(err);
                         this.appData.error = true;
                     });
             },

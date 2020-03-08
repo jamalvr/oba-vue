@@ -58,7 +58,6 @@
             newRequest: function() {
                 // Emit to parent state
                 if(this.newSubject !== null) {
-                    console.log('New request is emitted');
                     eventBus.$emit('newRequest', this.newSubject);
                 }
             },
