@@ -26,6 +26,7 @@
                     sortedByYear: false,
                     filtered: false,
                     localData: null,
+                    localQuery: null,
                 },
                 api: {
                     cors: 'https://cors-anywhere.herokuapp.com/',
@@ -42,6 +43,7 @@
             let vm = this;
             
             if ('oba-vue' in localStorage) {
+                this.getLocalQuery();
                 this.getLocalData();
             } else {
                 this.fetchData();
@@ -66,7 +68,7 @@
                         return response.json();
                     })
                     .then(data => {
-                        console.log(data.results);
+                        this.storeLocalData('oba-vue-query', this.api.query);
                         if (data.results.length <= 0) {
                             return this.appData.error = true;
                         }
@@ -77,21 +79,24 @@
                     .then(mappedData => {
                         this.appData.results = this.sort(mappedData, 'title');
                         this.appData.renderedResults = this.appData.results;
-                        return this.storeLocalData(mappedData);
+                        return this.storeLocalData('oba-vue', mappedData);
                     })
                     .catch(err => {
                         console.log(err);
                         this.appData.error = true;
                     });
             },
-            storeLocalData: function (data) {
-                localStorage.setItem('oba-vue', JSON.stringify(data));
+            storeLocalData: function (nameString, data) {
+                localStorage.setItem(nameString, JSON.stringify(data));
             },
             getLocalData: function () {
                 this.appData.localData = localStorage.getItem('oba-vue');
                 this.appData.results = JSON.parse(this.appData.localData);
                 this.appData.loading = false;
                 this.appData.renderedResults = this.appData.results;
+            },
+            getLocalQuery: function() {
+                this.api.query = localStorage.getItem('oba-vue-query').split('"').join('');
             },
             mapData: function (data) {
                 return data.map(function (object, index) {
